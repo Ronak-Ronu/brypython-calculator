@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browers`s python</title>
+    
+    <style>
+        *{
+
+            font-weight: normal;
+            font-size: 100px;
+            text-align: center;
+            padding: 18px 20px;
+            overflow-y: hidden;
+            background-color: rgb(194, 143, 233);
+        }
+        td{
+    background-color: transparent;
+    padding: 10px 30px 10px 30px;
+    border-radius: 0.2em;
+    text-align: center;
+    cursor: pointer;
+}
+td:hover{
+    color: white;
+
+}
+#result{
+    border-color: #000;
+    border-width: 1px;
+    border-style: solid;
+    text-align: left;
+}
+#name{
+    height: 2vh;
+    width: 34vw;
+    border-radius: 20px;
+    font-size: 55px;
+    border: none;
+    border-bottom: 5px solid black;
+    outline: none;
+}
+#show{
+    height: 5vh;
+    width: 12vw;
+    font-size: 30px;
+}
+#show:hover{
+    cursor: pointer;
+}
+
+    </style>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js"
+    ></script>
+
+  </head>
+    <body onload="brython()">
+       <input id="name" placeholder="name" >
+       <button id="show">CLICK</button>
+    <script type="text/python">
+        from browser import document,html
+        from browser.widgets.dialog import InfoDialog
+        cal=html.TABLE()
+        cal<=html.TR(html.TH(html.DIV("_",id="result"),colspan=3)+html.TD("C",id="clear"))
+        lines=["789/","456*","123-","0.=+"]
+        cal<=(html.TR(html.TD(x) for x in line) for line in lines)
+        document<=cal
+        result=document['result']
+        def action(evenet):
+            element=evenet.target
+            value=element.text
+           
+            if value not in "=C":
+                if result.text in ["_","error"]:
+                    result.text=value
+                else:
+                    result.text=result.text+value
+            elif value=="C":
+                result.text="_"     
+            elif value=="=":
+                try:
+                    result.text=eval(result.text)
+                except:
+                    result.text='🤔'
+
+        for button in document.select("td"):
+            button.bind("click",action)
+        def click(event):
+            InfoDialog("welcome",f"nice to meet you {document['name'].value}")
+        document['show'].bind("click",click)
+    </script>
+  </body>
+</html>
